@@ -14,8 +14,25 @@ app.use(express.json())
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.2mvagza.mongodb.net/?retryWrites=true&w=majority`;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 console.log(uri)
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
+async function run(){
+     try{
+        await client.connect();
+       const serviceCollection=client.db('houseHoldsServices').collection("services");
+       app.get('/services' , async(req,res)=>{
+         const query = {};
+         const cursor = serviceCollection.find(query);
+         const result = await cursor.toArray();
+         res.send(result)
+       })
+     }
+     finally{
+
+     }
+    }
+run().catch(err =>console.log(err))
 
 
 //databse
