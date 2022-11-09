@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 require('dotenv').config();
 const app = express();
@@ -14,7 +14,7 @@ app.use(express.json())
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.2mvagza.mongodb.net/?retryWrites=true&w=majority`;
-console.log(uri)
+
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run(){
@@ -26,6 +26,14 @@ async function run(){
          const cursor = serviceCollection.find(query);
          const result = await cursor.toArray();
          res.send(result)
+       })
+       //find a signle element of database
+       app.get('/services/:id', async(req,res)=>{
+        const serviceId = req.params.id;
+       
+        const query = {_id: ObjectId(serviceId)};
+        const result = await serviceCollection.findOne(query);
+        res.send(result)
        })
      }
      finally{
