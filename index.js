@@ -21,7 +21,7 @@ async function run(){
      try{
         await client.connect();
        const serviceCollection=client.db('houseHoldsServices').collection("services");
-       const reviewsCollection = client.db('houseHoldsServices').collection('reviews')
+       const reviewsCollection = client.db('houseHoldsServices').collection('reviews');
        app.get('/services' , async(req,res)=>{
          const query = {};
          const cursor = serviceCollection.find(query);
@@ -51,6 +51,13 @@ async function run(){
         const review = req.body;
         console.log(review)
         const result = await reviewsCollection.insertOne(review);
+        res.send(result)
+
+       }),
+       app.post("/services", async(req,res)=>{
+        const review = req.body;
+        console.log(review)
+        const result = await serviceCollection.insertOne(review);
         res.send(result)
 
        })
