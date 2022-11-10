@@ -24,10 +24,17 @@ async function run(){
        const reviewsCollection = client.db('houseHoldsServices').collection('reviews');
        app.get('/services' , async(req,res)=>{
          const query = {};
-         const cursor = serviceCollection.find(query);
+         const cursor = serviceCollection.find(query).limit(3);
          const result = await cursor.toArray();
          res.send(result)
        })
+       //
+       app.get('/allservices' , async(req,res)=>{
+        const query = {};
+        const cursor = serviceCollection.find(query);
+        const result = await cursor.toArray();
+        res.send(result)
+      })
        //find a signle element of database
        app.get('/services/:id', async(req,res)=>{
         const serviceId = req.params.id;
