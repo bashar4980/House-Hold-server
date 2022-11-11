@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require("cors");
+var jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 require('dotenv').config();
@@ -48,7 +49,8 @@ async function run(){
 
        app.get('/reviews', async(req,res)=>{
         const query = {};
-        const cursor = reviewsCollection.find(query);
+        const cursor = reviewsCollection.find(query).sort({_id:-1});
+        //$gt:ObjectId("502aa46c0674d23e3cee6152")}}).sort({"_id":1}
         const reviews = await cursor.toArray();
         res.send(reviews);
 
